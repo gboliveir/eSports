@@ -1,0 +1,4 @@
+/mobile/node_modules
+/web/node_modules
+/server/node_modules
+.vscode
