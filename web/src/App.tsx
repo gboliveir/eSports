@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import logoImg from './assets/logo-nlw.svg';
 import { CreateAdBanner } from './components/CreateAdBanner';
 
@@ -5,7 +7,27 @@ import { GameBanner } from './components/GameBanner';
 
 import './styles/main.css';
 
+
+interface GameType {
+  id: string;
+  bannerUrl: string;
+  title: string;
+  _count: {
+    ads: number;
+  }
+}
+
 export function App() {
+  const [games, setgames] = useState<GameType[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3333/games')
+      .then(response => response.json())
+      .then(data => {
+        setgames(data);
+      });
+  }, []);
+
   return ( 
     <div className='max-w-[1344px] mx-auto flex flex-col items-center my-20'>
       <img src={logoImg} alt="" />
@@ -15,17 +37,16 @@ export function App() {
       </h1>
 
       <div className='grid grid-cols-6 gap-6 mt-16'>
-        <GameBanner
-          bannerUrl='/game-1.png'
-          title='League of Legends'
-          adsCount={5}
-        />
-
-        <GameBanner
-          bannerUrl='/game-2.png'
-          title='Dota 2'
-          adsCount={2}
-        />
+        {games.map(game => {
+          return (
+            <GameBanner
+              key={game.id}
+              bannerUrl={game.bannerUrl}
+              title={game.title}
+              adsCount={game._count.ads}
+            />
+          );
+        })}
       </div>
 
       <CreateAdBanner />
