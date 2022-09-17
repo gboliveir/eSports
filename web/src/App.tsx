@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 
-import logoImg from './assets/logo-nlw.svg';
-import { CreateAdBanner } from './components/CreateAdBanner';
+import axios from 'axios';
 
+import logoImg from './assets/logo-nlw.svg';
+
+import { CreateAdBanner } from './components/CreateAdBanner';
 import { GameBanner } from './components/GameBanner';
+import { CreateAdModal } from './components/CreateAdModal';
 
 import './styles/main.css';
-import { CreateAdModal } from './components/CreateAdModal';
 
 interface GameType {
   id: string;
@@ -22,11 +24,9 @@ export function App() {
   const [games, setgames] = useState<GameType[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3333/games')
-      .then(response => response.json())
-      .then(data => {
-        setgames(data);
-      });
+    axios('http://localhost:3333/games').then(response => {
+      setgames(response.data);
+    });
   }, []);
 
   return ( 
